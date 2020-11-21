@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ParallelisationLibrary", "ParallelisationLibrary\ParallelisationLibrary.fsproj", "{47F9BEDD-4B09-4301-9875-76053465F536}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Tests", "Tests\Tests.fsproj", "{DDD98C14-22FD-4D52-844E-0ADFE6EBA062}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{47F9BEDD-4B09-4301-9875-76053465F536}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47F9BEDD-4B09-4301-9875-76053465F536}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47F9BEDD-4B09-4301-9875-76053465F536}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47F9BEDD-4B09-4301-9875-76053465F536}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDD98C14-22FD-4D52-844E-0ADFE6EBA062}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDD98C14-22FD-4D52-844E-0ADFE6EBA062}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDD98C14-22FD-4D52-844E-0ADFE6EBA062}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDD98C14-22FD-4D52-844E-0ADFE6EBA062}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
