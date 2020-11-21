@@ -25,9 +25,56 @@ let CalltMap () =
     Assert.AreEqual(floated,floatList)
     
 [<Test>]
-let BenchMark () =
-    let task x = List.reduce (/) (List.map (fun y -> (x|>float)**(y|>float)) [1..1000000])
-    let range = [1..1000]
+let SerialVsParallelBenchMark () =
+    let task x = List.reduce (*) (List.map (fun y -> (x|>float)**(y|>float)) [1..100000])
+    let range = [1..100]
     let timeSerial = timeIt "Serial" (List.map task) range
     let timeParallel = timeIt "Parallel" (List.pMap task) range
+    Assert.LessOrEqual(timeParallel,timeSerial)
+    
+[<Test>]
+let RangeVsMapBenchmark () =
+    let task x = List.reduce (*) (List.map (fun y -> (x|>float)**(y|>float)) [1..100])
+    let timeMap = timeIt "Map" (List.pMap task) [1..100000]
+    let timeRange = timeIt "Range" (List.pMapRange task) 100000
+    Assert.LessOrEqual(timeRange,timeMap)
+    
+[<Test>]
+let rangeGenVsSplit () =
+    let num = 100000
+    let genRanges x n =
+        let spares = n % x
+        let each = n / x
+        let rec genRanges' don spare acc =
+            let added = (don + each + (if spare > 0 then 1 else 0))
+            let range = [(don + 1)..added]
+            match don with
+            | _ when (added) >= n -> List.append acc [range]
+            | _ -> genRanges' added (spare-1) (List.append acc [range])
+        genRanges' 0 spares []
+    let range = [1..num]
+    let timeSplit = timeIt "Split" (List.splitInto numThreads) range
+    let timeRange = timeIt "Range" (genRanges numThreads) num
+    Assert.LessOrEqual(timeRange,timeSplit)
+    
+[<Test>]
+let genIsSplit () =
+    let genRanges x n =
+        let spares = n % x
+        let each = n / x
+        let rec genRanges' don spare acc =
+            let added = (don + each + (if spare > 0 then 1 else 0))
+            let range = [(don + 1)..added]
+            match don with
+            | _ when (added) >= n -> List.append acc [range]
+            | _ -> genRanges' added (spare-1) (List.append acc [range])
+        genRanges' 0 spares []
+    let num = 1000
+    Assert.AreEqual(List.splitInto numThreads [1..num],genRanges numThreads num)
+    
+[<Test>]
+let SerialVsParallelReduceBenchmark () =
+    let range = [1..1000000000]
+    let timeSerial = timeIt "Serial" (List.reduce (+)) range
+    let timeParallel = timeIt "Parallel" (List.pReduce (+)) range
     Assert.LessOrEqual(timeParallel,timeSerial)
