@@ -1,6 +1,7 @@
 ﻿namespace ParallelisationLibrary
 
     open System
+    open System.Diagnostics.CodeAnalysis
 
     module Extensions =
         let numThreads = Environment.ProcessorCount
@@ -45,28 +46,27 @@
                 |> List.concat
                 
                 
-            /// Creates a split list from 1..n and then applies mapper to each element in a parallel way
-            /// The mapping function from int -> 'U is applied to each element
-            /// returns a 'U list in the same order as input
-            static member pMapRange (mapper: int -> 'U) (n: int) : 'U list =
-                let asyncMap f xl = async{return List.map f xl}
+            /// Same as List.init but in a parallel fashion
+            static member pInit (n: int) (mapper: int -> 'U) : 'U list =
+                let asyncMap f count = async{return List.init count f}
+                let applyOffset off (f : int -> 'U) n = f (off + n)  
                 let genRanges x n =
                     let spares = n % x
                     let each = n / x
                     let rec genRanges' don spare acc =
                         let added = (don + each + (if spare > 0 then 1 else 0))
-                        let range = [(don + 1)..added]
                         match don with
-                        | _ when (added) >= n -> List.append acc [range]
-                        | _ -> genRanges' added (spare-1) (List.append acc [range])
+                        | _ when (added) >= n -> List.append acc [(don,added-don)]
+                        | _ -> genRanges' added (spare-1) (List.append acc [(don,added-don)])
                     genRanges' 0 spares []
                 let ranges = genRanges numThreads n
                 ranges
-                |> List.map (asyncMap mapper)
+                |> List.map (fun (off,count) -> asyncMap (applyOffset off mapper) count)
                 |> Async.Parallel
                 |> Async.RunSynchronously
                 |> Array.toList
                 |> List.concat
+                
                 
             /// Reduces a list to a value in a parallel fashion NOTE: non-associative functions will have strange results. Does seem to be slower than single threaded for trivial operations
             /// The reducing function SHOULD BE ASSOCIATIVE
