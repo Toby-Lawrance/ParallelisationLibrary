@@ -35,9 +35,18 @@ let SerialVsParallelBenchMark () =
 [<Test>]
 let RangeVsMapBenchmark () =
     let task x = List.reduce (*) (List.map (fun y -> (x|>float)**(y|>float)) [1..100])
-    let timeMap = timeIt "Map" (List.pMap task) [1..100000]
-    let timeRange = timeIt "Range" (List.pMapRange task) 100000
+    let timeMap = timeIt "Map" (List.pMap task) [1..1000000]
+    let timeRange = timeIt "Range" (List.pInit 100000) task
     Assert.LessOrEqual(timeRange,timeMap)
+    
+[<Test>]
+let ``Show Correct offsets by generating a sequential list`` () =
+    let task x = x
+    let list = List.pInit 100000 task
+    printfn ""
+    printfn ""
+    let normalList = List.init 100000 task
+    Assert.AreEqual(list,normalList)
     
 [<Test>]
 let rangeGenVsSplit () =
