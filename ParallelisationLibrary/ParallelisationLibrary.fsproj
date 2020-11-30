@@ -14,7 +14,7 @@
 
     <ItemGroup>
         <Compile Include="ListExtensions.fs" />
-        <Compile Include="ArrayExtensions.fs" />
+        <Compile Include="SeqExtensions.fs" />
     </ItemGroup>
 
 </Project>
