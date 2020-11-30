@@ -2,7 +2,6 @@ module Tests
 
 open System
 open System.Diagnostics
-open System.Xml.Linq
 open NUnit.Framework
 open ParallelisationLibrary
 
