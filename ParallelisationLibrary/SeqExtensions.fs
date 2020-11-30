@@ -1,7 +1,6 @@
 ﻿namespace ParallelisationLibrary
 
     open System
-    open System.Diagnostics.CodeAnalysis
 
     module Seq =
             let private numThreads = Environment.ProcessorCount
