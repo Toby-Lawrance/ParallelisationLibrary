@@ -47,6 +47,7 @@
                 
                 
             /// Same as List.init but in a parallel fashion
+            /// Appears to run significantly faster under most loads
             static member pInit (n: int) (mapper: int -> 'U) : 'U list =
                 let asyncMap f count = async{return List.init count f}
                 let applyOffset off (f : int -> 'U) n = f (off + n)  
