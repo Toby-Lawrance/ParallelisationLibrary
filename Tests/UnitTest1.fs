@@ -1,9 +1,12 @@
 module Tests
 
+open System
 open System.Diagnostics
 open System.Xml.Linq
 open NUnit.Framework
-open ParallelisationLibrary.Extensions
+open ParallelisationLibrary
+
+let numThreads = Environment.ProcessorCount
 
 let timeIt name (thing: 'X -> 'Y) arg =
     let stopWatch = Stopwatch.StartNew()
