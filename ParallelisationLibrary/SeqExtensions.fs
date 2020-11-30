@@ -59,8 +59,8 @@ module Seq =
                     (don + each + (if spare > 0 then 1 else 0))
 
                 match don with
-                | _ when (added) >= n -> Seq.append acc [ (don, added - don) ]
-                | _ -> genRanges' added (spare - 1) (Seq.append acc [ (don, added - don) ])
+                | _ when (added) >= n -> List.append acc [ (don, added - don) ]
+                | _ -> genRanges' added (spare - 1) (List.append acc [ (don, added - don) ])
 
             genRanges' 0 spares []
 
