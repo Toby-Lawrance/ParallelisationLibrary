@@ -80,10 +80,3 @@ let genIsSplit () =
         genRanges' 0 spares []
     let num = 1000
     Assert.AreEqual(List.splitInto numThreads [1..num],genRanges numThreads num)
-    
-[<Test>]
-let SerialVsParallelReduceBenchmark () =
-    let range = [1..1000000000]
-    let timeSerial = timeIt "Serial" (List.reduce (+)) range
-    let timeParallel = timeIt "Parallel" (List.pReduce (+)) range
-    Assert.LessOrEqual(timeParallel,timeSerial)
